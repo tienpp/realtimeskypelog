@@ -43,22 +43,30 @@ class SkypeHandler:
 
         if status == Skype4Py.skype.cmsReceived:
             if self.DB:
-                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic, nick, handle, body) VALUES(?,?,?,?,?,?)''', (msg.Id, name, label, nick, handle, msg.Body))
+                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic,
+                                    nick, handle, body) VALUES(?,?,?,?,?,?)''',
+                                    (msg.Id, name, label, nick, handle, msg.Body))
             else:
                 print handle, nick, '('+name+')', msg.Body
         elif status == Skype4Py.skype.cmsRead:
             if self.DB:
-                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic, nick, handle, body) VALUES(?,?,?,?,?,?)''', (msg.Id, name, label, nick, handle, msg.Body))
+                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic,
+                                    nick, handle, body) VALUES(?,?,?,?,?,?)''',
+                                    (msg.Id, name, label, nick, handle, msg.Body))
             else:
                 print handle, nick, '('+name+')', msg.Body
         elif status == Skype4Py.skype.cmsSent:
             if self.DB:
-                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic, nick, handle, body) VALUES(?,?,?,?,?,?)''', (msg.Id, name, label, nick, handle, msg.Body))
+                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic, 
+                                    nick, handle, body) VALUES(?,?,?,?,?,?)''', 
+                                    (msg.Id, name, label, nick, handle, msg.Body))
             else:
                 print handle, nick, '('+name+')', msg.Body
         elif status == Skype4Py.skype.cmsUnknown:
             if self.DB:
-                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic, nick, handle, body) VALUES(?,?,?,?,?,?)''', (msg.Id, name, label, nick, handle, msg.Body))
+                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic,
+                                    nick, handle, body) VALUES(?,?,?,?,?,?)''',
+                                    (msg.Id, name, label, nick, handle, msg.Body))
             else:
                 print handle, nick, '('+name+')', msg.Body
         self.db.commit()
