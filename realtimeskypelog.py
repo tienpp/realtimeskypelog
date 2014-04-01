@@ -2,6 +2,7 @@ import Skype4Py
 import time
 import signal
 import sqlite3
+import sys
 
 class SkypeHandler:
 
@@ -22,8 +23,11 @@ class SkypeHandler:
         """ Reveice Skype4Py.Skype instance
         *** Maybe launch Skype if not launched?
         """
-        skype = Skype4Py.Skype(Events=self)
-
+        if sys.platform == "linux2":
+            skype = Skype4Py.Skype(Events=self, Transport='x11')
+        else:
+            # OSX, windows
+            skype = Skype4Py.Skype(Events=self)
         if not skype.Client.IsRunning:
             skype.Client.Start()
 
@@ -31,10 +35,12 @@ class SkypeHandler:
 
     def MessageStatus(self, msg, status):
         """ Skype event handler """
+        room = False
         if (len(msg.Chat.Members) > 2): #chat room
             label = msg.Chat.Topic
             handle = msg.ChatName
             icon = None
+            room = True
         else: #individual chat
             label = msg.FromDisplayName
             handle = msg.FromHandle
@@ -69,17 +75,9 @@ class SkypeHandler:
     def MessageHistory(self, Username):
         print Username
 
-    def handle_unread_messages(self):
-        for msg in self.client.MissedMessages:
-            self.MessageStatus(msg, msg.Status)
-
-    # gtk timeout callback
     def attach_client(self):
         """ tries to attach API to client """
         self.client.Attach()
-
-    def add_msg():
-        print AA 
 
 if __name__ == '__main__':
     SkypeHandler()
