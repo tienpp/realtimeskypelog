@@ -10,6 +10,7 @@ class SkypeHandler:
         self.client.Attach()
         self.DB = False
         try:
+            open('temp.db')
             self.db = sqlite3.connect('temp.db', check_same_thread=False)
             self.cursor = self.db.cursor()
             self.DB = True
@@ -40,19 +41,13 @@ class SkypeHandler:
 
         nick = msg.FromHandle
         name = msg.FromDisplayName
-
+        #print status
         if status == Skype4Py.skype.cmsReceived:
             if self.DB:
                 self.cursor.execute('''INSERT INTO messages(msg_id, name, topic,
                                     nick, handle, body) VALUES(?,?,?,?,?,?)''',
                                     (msg.Id, name, label, nick, handle, msg.Body))
-            else:
-                print handle, nick, '('+name+')', msg.Body
-        elif status == Skype4Py.skype.cmsRead:
-            if self.DB:
-                self.cursor.execute('''INSERT INTO messages(msg_id, name, topic,
-                                    nick, handle, body) VALUES(?,?,?,?,?,?)''',
-                                    (msg.Id, name, label, nick, handle, msg.Body))
+                self.db.commit()
             else:
                 print handle, nick, '('+name+')', msg.Body
         elif status == Skype4Py.skype.cmsSent:
@@ -60,6 +55,7 @@ class SkypeHandler:
                 self.cursor.execute('''INSERT INTO messages(msg_id, name, topic, 
                                     nick, handle, body) VALUES(?,?,?,?,?,?)''', 
                                     (msg.Id, name, label, nick, handle, msg.Body))
+                self.db.commit()
             else:
                 print handle, nick, '('+name+')', msg.Body
         elif status == Skype4Py.skype.cmsUnknown:
@@ -67,9 +63,9 @@ class SkypeHandler:
                 self.cursor.execute('''INSERT INTO messages(msg_id, name, topic,
                                     nick, handle, body) VALUES(?,?,?,?,?,?)''',
                                     (msg.Id, name, label, nick, handle, msg.Body))
+                self.db.commit()
             else:
                 print handle, nick, '('+name+')', msg.Body
-        self.db.commit()
     def MessageHistory(self, Username):
         print Username
 
